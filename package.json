@@ -1,0 +1,14 @@
+{
+  "name": "libsw",
+  "version": "1.0.0",
+  "description": "A client library for Scrumwise API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aurélien Bertron",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "superagent": "4.0.0"
+  }
+}
