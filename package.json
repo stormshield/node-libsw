@@ -2,13 +2,23 @@
   "name": "libsw",
   "version": "1.0.0",
   "description": "A client library for Scrumwise API",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "$(npm bin)/mocha --require test/setup-utils.js test/**/*-spec.js"
   },
   "author": "Aurélien Bertron",
   "license": "Apache-2.0",
   "dependencies": {
     "superagent": "4.0.0"
+  },
+  "devDependencies": {
+    "basic-auth": "2.0.1",
+    "chai": "4.2.0",
+    "chai-as-promised": "7.1.1",
+    "mocha": "5.2.0",
+    "mock-http-server": "1.2.0",
+    "proxyquire": "2.1.0",
+    "sinon": "7.1.1",
+    "sinon-chai": "3.3.0"
   }
 }
