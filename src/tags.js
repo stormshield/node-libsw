@@ -33,19 +33,23 @@ module.exports = {
             return true
         })
     },
-    async getById(opts, tagId) {
-        const tags = await this.getAll(opts, {id: tagId})
-        if (tags.length === 0) {
-            throw new Error(`No tag found with id "${tagId}"`)
-        }
+    async getOne(opts, filter = {}) {
+        const tags = await this.getAll(opts, filter)
         return tags[0]
     },
+    async getById(opts, tagId) {
+        const tag = await this.getOne(opts, {id: tagId})
+        if (!tag) {
+            throw new Error(`No tag found with id "${tagId}"`)
+        }
+        return tag
+    },
     async getByName(opts, tagName) {
-        const tags = await this.getAll(opts, {name: tagName})
-        if (tags.length === 0) {
+        const tag = await this.getOne(opts, {name: tagName})
+        if (!tag) {
             throw new Error(`No tag found with name "${tagName}"`)
         }
-        return tags[0]
+        return tag
     },
     async removeTagFromObject(opts, tagId, objectType, objectId) {
         const res = await request

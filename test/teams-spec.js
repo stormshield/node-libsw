@@ -52,6 +52,27 @@ describe('Teams', function () {
 
   })
 
+  describe('#getOne', function () {
+
+    it('should return undefined if team does not exist', function () {
+      //
+      return teams.getOne({}, {id: 'unknown'}).should.eventually.be.undefined
+    })
+
+    it('should return filtered team', async function () {
+      // given
+      const team = {id: 'filter'}
+      mockTeams.push(team)
+
+      // when
+      const res = await teams.getOne({}, {id: 'filter'})
+
+      // then
+      res.should.eql(team)
+    })
+
+  })
+
   describe('#getById', function () {
 
     it('should throw if team does not exist', function () {

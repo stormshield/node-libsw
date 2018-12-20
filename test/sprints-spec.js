@@ -52,6 +52,27 @@ describe('Sprints', function () {
 
   })
 
+  describe('#getOne', function () {
+
+    it('should return undefined if sprint does not exist', function () {
+      //
+      return sprints.getOne({}, {id: 'unknown'}).should.eventually.be.undefined
+    })
+
+    it('should return filtered sprint', async function () {
+      // given
+      const sprint = {id: 'filter'}
+      mockSprints.push(sprint)
+
+      // when
+      const res = await sprints.getOne({}, {id: 'filter'})
+
+      // then
+      res.should.eql(sprint)
+    })
+
+  })
+
   describe('#getById', function () {
 
     it('should throw if sprint does not exist', function () {

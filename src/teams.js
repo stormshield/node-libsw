@@ -14,18 +14,22 @@ module.exports = {
             return true
         })
     },
-    async getById(opts, teamId) {
-        const teams = await this.getAll(opts, {id: teamId})
-        if (teams.length === 0) {
-            throw new Error(`No team found with id "${teamId}"`)
-        }
+    async getOne(opts, filter = {}) {
+        const teams = await this.getAll(opts, filter)
         return teams[0]
     },
+    async getById(opts, teamId) {
+        const team = await this.getOne(opts, {id: teamId})
+        if (!team) {
+            throw new Error(`No team found with id "${teamId}"`)
+        }
+        return team
+    },
     async getByName(opts, teamName) {
-        const teams = await this.getAll(opts, {name: teamName})
-        if (teams.length === 0) {
+        const team = await this.getOne(opts, {name: teamName})
+        if (!team) {
             throw new Error(`No team found with name "${teamName}"`)
         }
-        return teams[0]
+        return team
     }
 }

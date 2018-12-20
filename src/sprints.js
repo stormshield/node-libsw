@@ -16,18 +16,22 @@ module.exports = {
             return true
         })
     },
-    async getById(opts, sprintId) {
-        const sprints = await this.getAll(opts, {id: sprintId})
-        if (sprints.length === 0) {
-            throw new Error(`No sprint found with id "${sprintId}"`)
-        }
+    async getOne(opts, filter = {}) {
+        const sprints = await this.getAll(opts, filter)
         return sprints[0]
     },
+    async getById(opts, sprintId) {
+        const sprint = await this.getOne(opts, {id: sprintId})
+        if (!sprint) {
+            throw new Error(`No sprint found with id "${sprintId}"`)
+        }
+        return sprint
+    },
     async getByName(opts, sprintName) {
-        const sprints = await this.getAll(opts, {name: sprintName})
-        if (sprints.length === 0) {
+        const sprint = await this.getOne(opts, {name: sprintName})
+        if (!sprint) {
             throw new Error(`No sprint found with name "${sprintName}"`)
         }
-        return sprints[0]
+        return sprint
     }
 }

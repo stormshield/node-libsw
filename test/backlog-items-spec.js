@@ -85,6 +85,27 @@ describe('Backlog items', function () {
 
   })
 
+  describe('#getOne', function () {
+
+    it('should return undefined if backlog item does not exist', function () {
+      //
+      return backlogItems.getOne({}, {id: 'unknown'}).should.eventually.be.undefined
+    })
+
+    it('should return filtered backlog item', async function () {
+      // given
+      const bi = {id: 'filter'}
+      mockBacklogItems.push(bi)
+
+      // when
+      const res = await backlogItems.getOne({}, {id: 'filter'})
+
+      // then
+      res.should.eql(bi)
+    })
+
+  })
+
   describe('#getById', function () {
 
     it('should throw if backlog item does not exist', function () {

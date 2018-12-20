@@ -107,6 +107,27 @@ describe('Tags', function () {
     })
   })
 
+  describe('#getOne', function () {
+
+    it('should return undefined if tag does not exist', function () {
+      //
+      return tags.getOne({}, {id: 'unknown'}).should.eventually.be.undefined
+    })
+
+    it('should return filtered tag', async function () {
+      // given
+      const tag = {id: 'filter'}
+      mockTags.push(tag)
+
+      // when
+      const res = await tags.getOne({}, {id: 'filter'})
+
+      // then
+      res.should.eql(tag)
+    })
+
+  })
+
   describe('#getById', function () {
     it('should throw if tag does not exist', function () {
       // then

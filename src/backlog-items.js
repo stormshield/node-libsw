@@ -12,7 +12,7 @@ function filterBacklogItem(item, filter = {}) {
                 return []
             }
         }
-        return [item]
+        return item
     }
     return [].concat(...item.childBacklogItems.map(item => filterBacklogItem(item, filter)))
 }
@@ -26,19 +26,23 @@ module.exports = {
         const data = await getData(opts, ...objects)
         return [].concat(...data.result.projects[0].backlogItems.map(backlogItem => filterBacklogItem(backlogItem, filter)))
     },
-    async getById(opts, backlogItemId) {
-        const backlogItems = await this.getAll(opts, {id: backlogItemId})
-        if (backlogItems.length === 0) {
-            throw new Error(`No backlog item found with id "${backlogItemId}"`)
-        }
+    async getOne(opts, filter = {}) {
+        const backlogItems = await this.getAll(opts, filter)
         return backlogItems[0]
     },
+    async getById(opts, backlogItemId) {
+        const backlogItem = await this.getOne(opts, {id: backlogItemId})
+        if (!backlogItem) {
+            throw new Error(`No backlog item found with id "${backlogItemId}"`)
+        }
+        return backlogItem
+    },
     async getByItemNumber(opts, itemNumber) {
-        const backlogItems = await this.getAll(opts, {itemNumber})
-        if (backlogItems.length === 0) {
+        const backlogItem = await this.getOne(opts, {itemNumber})
+        if (!backlogItem) {
             throw new Error(`No backlog item found with number "${itemNumber}"`)
         }
-        return backlogItems[0]
+        return backlogItem
     },
     async getByTeamIdAndSprintId(opts, teamId, sprintId) {
         const backlogItems = await this.getAll(opts, {
