@@ -4,115 +4,115 @@ const proxyquire = require('proxyquire')
 const sinon = require('sinon')
 
 describe('Sprints', function () {
-  let mockSprints
-  let mockGetData
-  let sprints
+	let mockSprints
+	let mockGetData
+	let sprints
 
-  beforeEach(function () {
-    mockSprints = [{
-      name: 'sprint-1'
-    }]
-    mockGetData = {
-      SPRINTS: 'sprints',
-      getData: sinon.stub().resolves({result: {projects: [{sprints: mockSprints}]}})
-    }
-    sprints = proxyquire('../src/sprints', {
-      './get-data': mockGetData
-    })
-  })
+	beforeEach(function () {
+		mockSprints = [{
+			name: 'sprint-1'
+		}]
+		mockGetData = {
+			SPRINTS: 'sprints',
+			getData: sinon.stub().resolves({result: {projects: [{sprints: mockSprints}]}})
+		}
+		sprints = proxyquire('../src/sprints', {
+			'./get-data': mockGetData
+		})
+	})
 
-  describe('#getAll', function () {
+	describe('#getAll', function () {
 
-    it('should pass options to getData', async function () {
-      // given
-      const options = {a: 1}
+		it('should pass options to getData', async function () {
+			// given
+			const options = {a: 1}
 
-      // when
-      await sprints.getAll(options)
+			// when
+			await sprints.getAll(options)
 
-      // then
-      mockGetData.getData.should.have.been.calledWith(options)
-    })
+			// then
+			mockGetData.getData.should.have.been.calledWith(options)
+		})
 
-    it('should pass SPRINTS object to getData', async function () {
-      // when
-      await sprints.getAll({})
+		it('should pass SPRINTS object to getData', async function () {
+			// when
+			await sprints.getAll({})
 
-      // then
-      mockGetData.getData.should.have.been.calledWith({}, mockGetData.SPRINTS)
-    })
+			// then
+			mockGetData.getData.should.have.been.calledWith({}, mockGetData.SPRINTS)
+		})
 
-    it('should return all sprints', async function () {
-      // when
-      const res = await sprints.getAll({})
+		it('should return all sprints', async function () {
+			// when
+			const res = await sprints.getAll({})
 
-      // then
-      res.should.eql(mockSprints)
-    })
+			// then
+			res.should.eql(mockSprints)
+		})
 
-  })
+	})
 
-  describe('#getOne', function () {
+	describe('#getOne', function () {
 
-    it('should return undefined if sprint does not exist', function () {
-      //
-      return sprints.getOne({}, {id: 'unknown'}).should.eventually.be.undefined
-    })
+		it('should return undefined if sprint does not exist', function () {
+			//
+			return sprints.getOne({}, {id: 'unknown'}).should.eventually.be.undefined
+		})
 
-    it('should return filtered sprint', async function () {
-      // given
-      const sprint = {id: 'filter'}
-      mockSprints.push(sprint)
+		it('should return filtered sprint', async function () {
+			// given
+			const sprint = {id: 'filter'}
+			mockSprints.push(sprint)
 
-      // when
-      const res = await sprints.getOne({}, {id: 'filter'})
+			// when
+			const res = await sprints.getOne({}, {id: 'filter'})
 
-      // then
-      res.should.eql(sprint)
-    })
+			// then
+			res.should.eql(sprint)
+		})
 
-  })
+	})
 
-  describe('#getById', function () {
+	describe('#getById', function () {
 
-    it('should throw if sprint does not exist', function () {
-      // then
-      return sprints.getById({}, 'unknown').should.be.rejectedWith('No sprint found with id "unknown"')
-    })
+		it('should throw if sprint does not exist', function () {
+			// then
+			return sprints.getById({}, 'unknown').should.be.rejectedWith('No sprint found with id "unknown"')
+		})
 
-    it('should return filtered sprint', async function () {
-      // given
-      const sprint = {id: 'filter'}
-      mockSprints.push(sprint)
+		it('should return filtered sprint', async function () {
+			// given
+			const sprint = {id: 'filter'}
+			mockSprints.push(sprint)
 
-      // when
-      const res = await sprints.getById({}, 'filter')
+			// when
+			const res = await sprints.getById({}, 'filter')
 
-      // then
-      res.should.eql(sprint)
-    })
+			// then
+			res.should.eql(sprint)
+		})
 
-  })
+	})
 
-  describe('#getByName', function () {
+	describe('#getByName', function () {
 
-    it('should throw if sprint does not exist', function () {
-      // then
-      return sprints.getByName({}, 'unknown').should.be.rejectedWith('No sprint found with name "unknown"')
-    })
+		it('should throw if sprint does not exist', function () {
+			// then
+			return sprints.getByName({}, 'unknown').should.be.rejectedWith('No sprint found with name "unknown"')
+		})
 
-    it('should return filtered sprint', async function () {
-      // given
-      const sprint = {name: 'filter'}
-      mockSprints.push(sprint)
+		it('should return filtered sprint', async function () {
+			// given
+			const sprint = {name: 'filter'}
+			mockSprints.push(sprint)
 
-      // when
-      const res = await sprints.getByName({}, 'filter')
+			// when
+			const res = await sprints.getByName({}, 'filter')
 
-      // then
-      res.should.eql(sprint)
-    })
+			// then
+			res.should.eql(sprint)
+		})
 
-  })
+	})
 
 })
