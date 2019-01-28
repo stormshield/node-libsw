@@ -50,8 +50,22 @@ module.exports = {
 		}
 		throw new Error(`No task found with number "${taskNumber}"`)
 	},
+	async moveTaskToBoardColumn(opts, taskId, boardColumnId, assignedPersonId = null) {
+		const data = {
+			taskID: taskId,
+			boardColumnID: boardColumnId
+		}
+		if (assignedPersonId) {
+			data.assignedPersonID = assignedPersonId
+		}
+		await request
+			.post(`${config.url}/moveTaskToBoardColumn`)
+			.auth(opts.email, opts.apikey)
+			.type('form')
+			.send(data)
+	},
 	async setTaskDescription(opts, taskId, description) {
-		const res = await request
+		await request
 			.post(`${config.url}/setTaskDescription`)
 			.auth(opts.email, opts.apikey)
 			.type('form')
@@ -59,10 +73,9 @@ module.exports = {
 				taskID: taskId,
 				description
 			})
-		return res.body
 	},
 	async setTaskName(opts, taskId, name) {
-		const res = await request
+		await request
 			.post(`${config.url}/setTaskName`)
 			.auth(opts.email, opts.apikey)
 			.type('form')
@@ -70,6 +83,5 @@ module.exports = {
 				taskID: taskId,
 				name
 			})
-		return res.body
 	}
 }

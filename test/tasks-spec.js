@@ -164,6 +164,45 @@ describe('Tasks', function () {
 		})
 	})
 
+	describe('#moveTaskToBoardColumn', function () {
+		let mockRes
+
+		beforeEach(function () {
+			mockRes = {result: {}}
+			server.on({
+				method: 'POST',
+				path: '/moveTaskToBoardColumn',
+				reply: {
+					status: 200,
+					headers: {'content-type': 'application/json'},
+					body: JSON.stringify(mockRes)
+				}
+			})
+		})
+
+		it('should call API with provided data', async function () {
+			// given
+			const options = {
+				email: 'email',
+				apikey: 'apikey'
+			}
+			const taskId = 'task'
+			const boardColumnId = 'columnId'
+			const assignedPersonId = 'personId'
+
+			// when
+			await tasks.moveTaskToBoardColumn(options, taskId, boardColumnId, assignedPersonId)
+
+			// then
+			const req = server.requests()[0]
+			basicAuth.parse(req.headers['authorization']).should.eql({
+				name: options.email,
+				pass: options.apikey
+			})
+			req.body.should.eql({taskID: taskId, boardColumnID: boardColumnId, assignedPersonID: assignedPersonId})
+		})
+	})
+
 	describe('#setTaskDescription', function () {
 		let mockRes
 
@@ -180,7 +219,7 @@ describe('Tasks', function () {
 			})
 		})
 
-		it('should call API with provided data and return response', async function () {
+		it('should call API with provided data', async function () {
 			// given
 			const options = {
 				email: 'email',
@@ -190,10 +229,9 @@ describe('Tasks', function () {
 			const description = 'description'
 
 			// when
-			const res = await tasks.setTaskDescription(options, taskId, description)
+			await tasks.setTaskDescription(options, taskId, description)
 
 			// then
-			res.should.eql(mockRes)
 			const req = server.requests()[0]
 			basicAuth.parse(req.headers['authorization']).should.eql({
 				name: options.email,
@@ -219,7 +257,7 @@ describe('Tasks', function () {
 			})
 		})
 
-		it('should call API with provided data and return response', async function () {
+		it('should call API with provided data', async function () {
 			// given
 			const options = {
 				email: 'email',
@@ -229,10 +267,9 @@ describe('Tasks', function () {
 			const name = 'name'
 
 			// when
-			const res = await tasks.setTaskName(options, taskId, name)
+			await tasks.setTaskName(options, taskId, name)
 
 			// then
-			res.should.eql(mockRes)
 			const req = server.requests()[0]
 			basicAuth.parse(req.headers['authorization']).should.eql({
 				name: options.email,
