@@ -5,6 +5,7 @@ const config = require('./config.json')
 
 module.exports = {
 	BACKLOG_ITEMS: 'Project.backlogItems',
+	BOARDS: 'Project.boards',
 	SPRINTS: 'Project.sprints',
 	TAGS: 'Project.tags',
 	TASKS: 'BacklogItem.tasks',
