@@ -6,7 +6,7 @@ The official documentation is available [here](https://www.scrumwise.com/api.htm
 
 ## Usage
 
-`npm install -S libsw`
+`npm install -S @stormshield/libsw`
 
 The library offers some operations on different resources e.g. backlog items, sprints, tags, etc.
 
