@@ -2,19 +2,22 @@
 
 const {getData, BACKLOG_ITEMS, TASKS} = require('./get-data')
 
-function filterBacklogItem(item, filter = {}) {
-	if (!Array.isArray(item.childBacklogItems) || item.childBacklogItems.length === 0) {
-		for (const field of Object.keys(filter)) {
-			if (typeof item[field] === 'number') {
-				item[field] = String(item[field])
-			}
-			if (item[field] !== filter[field]) {
-				return []
-			}
+function getBacklogItemReducer(fields) {
+	return function backlogItemReducer(acc, item) {
+		if (!Array.isArray(item.childBacklogItems) || item.childBacklogItems.length === 0) {
+			const isToKeep = Object.keys(fields).reduce((isToKeep, field) => {
+				if (!isToKeep) {
+					return isToKeep
+				}
+				if (typeof item[field] === 'number') {
+					item[field] = String(item[field])
+				}
+				return item[field] === fields[field]
+			}, true)
+			return isToKeep ? [...acc, item] : acc
 		}
-		return item
+		return item.childBacklogItems.reduce(backlogItemReducer, acc)
 	}
-	return [].concat(...item.childBacklogItems.map(item => filterBacklogItem(item, filter)))
 }
 
 module.exports = {
@@ -24,7 +27,7 @@ module.exports = {
 			objects.push(TASKS)
 		}
 		const data = await getData(opts, ...objects)
-		return [].concat(...data.result.projects[0].backlogItems.map(backlogItem => filterBacklogItem(backlogItem, filter)))
+		return data.result.projects[0].backlogItems.reduce(getBacklogItemReducer(filter), [])
 	},
 	async getOne(opts, filter = {}) {
 		const backlogItems = await this.getAll(opts, filter)
