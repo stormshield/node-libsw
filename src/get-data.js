@@ -4,12 +4,14 @@ const request = require('superagent')
 const config = require('./config.json')
 
 module.exports = {
+	BACKLOG_ITEM_COMMENTS: 'BacklogItem.comments',
 	BACKLOG_ITEMS: 'Project.backlogItems',
 	BOARDS: 'Project.boards',
 	DELETED_PERSONS: 'Data.deletedPersons',
 	SPRINTS: 'Project.sprints',
 	PERSONS: 'Data.persons',
 	TAGS: 'Project.tags',
+	TASK_COMMENTS: 'Task.comments',
 	TASKS: 'BacklogItem.tasks',
 	TEAMS: 'Project.teams',
 	async getData(opts, ...objects) {

@@ -110,15 +110,48 @@ describe('Tasks', function () {
 		})
 	})
 
-	describe('#getById', function () {
+	describe('#getOne', function () {
 		it('should throw if no backlog item was found', function () {
 			// given
 			mockBacklogItemsList.pop()
 
 			// then
-			return tasks.getById({}, 'task').should.be.rejectedWith('No backlog item found')
+			return tasks.getOne({}, 'task').should.be.rejectedWith('No backlog item found')
 		})
 
+		it('should return undefined if not task was found', function () {
+			// then
+			return tasks.getOne({}, {id: 'unknown'}).should.become(undefined)
+		})
+
+		it('should pass getTasksComments option to BacklogItems.getAll if getComments option was passed', async function () {
+			// given
+			const options = {getComments: true}
+			
+			// when
+			await tasks.getOne(options)
+
+			// then
+			mockBacklogItems.getAll.should.have.been.calledWith(Object.assign({
+				getTasks: true,
+				getTasksComments: true
+			}, options))
+		})
+
+		it('should filter backlog item and return task', async function () {
+			// given
+			const options = {a: 1}
+
+			// when
+			const res = await tasks.getOne(options)
+
+			// then
+			mockBacklogItems.getAll.should.have.been.calledWith(Object.assign({getTasks: true}, options))
+			res.should.eql(mockBacklogItemsList[0].tasks[0])
+		})
+	})
+
+	describe('#getById', function () {
 		it('should throw if task does not exist', function () {
 			// then
 			return tasks.getById({}, 'unknown').should.be.rejectedWith('No task found with id "unknown"')
@@ -132,20 +165,11 @@ describe('Tasks', function () {
 			const res = await tasks.getById(options, 'task')
 
 			// then
-			mockBacklogItems.getAll.should.have.been.calledWith(Object.assign({getTasks: true}, options))
 			res.should.eql(mockBacklogItemsList[0].tasks[0])
 		})
 	})
 
 	describe('#getByNumber', function () {
-		it('should throw if no backlog item was found', function () {
-			// given
-			mockBacklogItemsList.pop()
-
-			// then
-			return tasks.getByNumber({}, '1').should.be.rejectedWith('No backlog item found')
-		})
-
 		it('should throw if task does not exist', function () {
 			// then
 			return tasks.getByNumber({}, '0').should.be.rejectedWith('No task found with number "0"')
@@ -159,7 +183,6 @@ describe('Tasks', function () {
 			const res = await tasks.getByNumber(options, '1')
 
 			// then
-			mockBacklogItems.getAll.should.have.been.calledWith(Object.assign({getTasks: true}, options))
 			res.should.eql(mockBacklogItemsList[0].tasks[0])
 		})
 	})

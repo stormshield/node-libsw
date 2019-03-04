@@ -1,6 +1,6 @@
 'use strict'
 
-const {getData, BACKLOG_ITEMS, TASKS} = require('./get-data')
+const {getData, BACKLOG_ITEM_COMMENTS, BACKLOG_ITEMS, TASK_COMMENTS, TASKS} = require('./get-data')
 
 function getBacklogItemReducer(fields) {
 	return function backlogItemReducer(acc, item) {
@@ -23,8 +23,14 @@ function getBacklogItemReducer(fields) {
 module.exports = {
 	async getAll(opts, filter = {}) {
 		const objects = [BACKLOG_ITEMS]
+		if (opts.getComments === true) {
+			objects.push(BACKLOG_ITEM_COMMENTS)
+		}
 		if (opts.getTasks === true) {
 			objects.push(TASKS)
+		}
+		if (opts.getTasksComments === true) {
+			objects.push(TASK_COMMENTS)
 		}
 		const data = await getData(opts, ...objects)
 		return data.result.projects[0].backlogItems.reduce(getBacklogItemReducer(filter), [])

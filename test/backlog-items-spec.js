@@ -13,7 +13,9 @@ describe('Backlog items', function () {
 			name: 'backlog-item-1'
 		}]
 		mockGetData = {
+			BACKLOG_ITEM_COMMENTS: 'backlogItemsComments',
 			BACKLOG_ITEMS: 'backlogItems',
+			TASK_COMMENTS: 'taskComments',
 			TASKS: 'tasks',
 			getData: sinon.stub().resolves({result: {projects: [{backlogItems: mockBacklogItems}]}})
 		}
@@ -43,6 +45,17 @@ describe('Backlog items', function () {
 			mockGetData.getData.should.have.been.calledWith({}, mockGetData.BACKLOG_ITEMS)
 		})
 
+		it('should pass BACKLOG_ITEM_COMMENTS to getData when getComments option is set', async function () {
+			// given
+			const options = {getComments: true}
+
+			// when
+			await backlogItems.getAll(options)
+
+			// then
+			mockGetData.getData.should.have.been.calledWith(options, mockGetData.BACKLOG_ITEMS, mockGetData.BACKLOG_ITEM_COMMENTS)
+		})
+
 		it('should pass TASKS object to getData when getTasks option is set', async function () {
 			// given
 			const options = {getTasks: true}
@@ -52,6 +65,17 @@ describe('Backlog items', function () {
 
 			// then
 			mockGetData.getData.should.have.been.calledWith(options, mockGetData.BACKLOG_ITEMS, mockGetData.TASKS)
+		})
+
+		it('should pass TASK_COMMENTS to getData when getTasksComments option is set', async function () {
+			// given
+			const options = {getTasksComments: true}
+
+			// when
+			await backlogItems.getAll(options)
+
+			// then
+			mockGetData.getData.should.have.been.calledWith(options, mockGetData.BACKLOG_ITEMS, mockGetData.TASK_COMMENTS)
 		})
 
 		it('should return all backlog items', async function () {

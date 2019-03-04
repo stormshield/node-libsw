@@ -5,6 +5,20 @@ const request = require('superagent')
 const BacklogItems = require('./backlog-items')
 const config = require('./config.json')
 
+function taskFilter(fields = {}) {
+	return task => {
+		return Object.keys(fields).reduce((isToKeep, field) => {
+			if (!isToKeep) {
+				return isToKeep
+			}
+			if (typeof task[field] === 'number') {
+				task[field] = String(task[field])
+			}
+			return task[field] === fields[field]
+		}, true)
+	}
+}
+
 module.exports = {
 	async addTask(opts, backlogItemId, task) {
 		const res = await request
@@ -24,31 +38,35 @@ module.exports = {
 			.type('form')
 			.send({taskID: taskId})
 	},
-	async getById(opts, taskId) {
+	async getOne(opts, filter = {}) {
+		if (opts.getComments) {
+			opts.getTasksComments = true
+			delete opts.getComments
+		}
 		const backlogItems = await BacklogItems.getAll({getTasks: true, ...opts})
 		if (backlogItems.length === 0) {
 			throw new Error('No backlog item found')
 		}
-		for (const item of backlogItems) {
-			const task = item.tasks.find(task => task.id === taskId)
-			if (task !== undefined) {
-				return task
+		for (const backlogItem of backlogItems) {
+			const filteredTasks = backlogItem.tasks.filter(taskFilter(filter))
+			if (filteredTasks.length > 0) {
+				return filteredTasks[0]
 			}
 		}
-		throw new Error(`No task found with id "${taskId}"`)
+	},
+	async getById(opts, taskId) {
+		const task = await this.getOne(opts, {id: taskId})
+		if (!task) {
+			throw new Error(`No task found with id "${taskId}"`)
+		}
+		return task
 	},
 	async getByNumber(opts, taskNumber) {
-		const backlogItems = await BacklogItems.getAll({getTasks: true, ...opts})
-		if (backlogItems.length === 0) {
-			throw new Error('No backlog item found')
+		const task = await this.getOne(opts, {taskNumber})
+		if (!task) {
+			throw new Error(`No task found with number "${taskNumber}"`)
 		}
-		for (const item of backlogItems) {
-			const task = item.tasks.find(task => String(task.taskNumber) === taskNumber)
-			if (task !== undefined) {
-				return task
-			}
-		}
-		throw new Error(`No task found with number "${taskNumber}"`)
+		return task
 	},
 	async moveTaskToBoardColumn(opts, taskId, boardColumnId, assignedPersonId = null) {
 		const data = {
