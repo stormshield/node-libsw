@@ -6,10 +6,6 @@ const config = require('./config.json')
 const {getData, TAGS} = require('./get-data')
 
 module.exports = {
-	OBJ_RELEASE: 'Release',
-	OBJ_SPRINT: 'Sprint',
-	OBJ_BACKLOG_ITEM: 'BacklogItem',
-	OBJ_TASK: 'Task',
 	async addTagOnObject(opts, tagId, objectType, objectId) {
 		const res = await request
 			.post(`${config.url}/addTagOnObject`)

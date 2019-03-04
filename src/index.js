@@ -4,6 +4,8 @@ module.exports = {
 	backlogItems: require('./backlog-items'),
 	boards: require('./boards'),
 	boardColumns: require('./board-columns'),
+	comments: require('./comments'),
+	objects: require('./objects'),
 	persons: require('./persons'),
 	sprints: require('./sprints'),
 	tags: require('./tags'),
