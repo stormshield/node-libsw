@@ -27,5 +27,12 @@ module.exports = {
 			.type('form')
 			.send(params)
 		return res.body
+	},
+	async getDataVersion(opts) {
+		const res = await request
+			.post(`${config.url}/getDataVersion`)
+			.auth(opts.email, opts.apikey)
+			.send()
+		return res.body
 	}
 }

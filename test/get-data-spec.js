@@ -20,7 +20,7 @@ describe('Get data', function () {
 			url = `http://localhost:${server.getHttpPort()}`
 			getData = proxyquire('../src/get-data', {
 				'./config.json': {url}
-			}).getData
+			})
 			done()
 		})
 	})
@@ -29,32 +29,62 @@ describe('Get data', function () {
 		server.stop(done)
 	})
 
-	it('should call API with provided data and return response', async function () {
-		// given
-		const mockRes = {objects: []}
-		server.on({
-			method: 'POST',
-			path: '/getData',
-			reply: {
-				status: 200,
-				headers: {'content-type': 'application/json'},
-				body: JSON.stringify(mockRes)
-			}
+	describe('#getData', function () {
+		it('should call API with provided data and return response', async function () {
+			// given
+			const mockRes = {objects: []}
+			server.on({
+				method: 'POST',
+				path: '/getData',
+				reply: {
+					status: 200,
+					headers: {'content-type': 'application/json'},
+					body: JSON.stringify(mockRes)
+				}
+			})
+	
+			// when
+			const res = await getData.getData(mockOptions, ...mockObjects)
+	
+			// then
+			res.should.eql(mockRes)
+			const req = server.requests()[0]
+			basicAuth.parse(req.headers['authorization']).should.eql({
+				name: mockOptions.email,
+				pass: mockOptions.apikey
+			})
+			req.body.should.eql({
+				projectIDs: mockOptions.projectid,
+				includeProperties: mockObjects.join(',')
+			})
 		})
+	})
 
-		// when
-		const res = await getData(mockOptions, ...mockObjects)
-
-		// then
-		res.should.eql(mockRes)
-		const req = server.requests()[0]
-		basicAuth.parse(req.headers['authorization']).should.eql({
-			name: mockOptions.email,
-			pass: mockOptions.apikey
-		})
-		req.body.should.eql({
-			projectIDs: mockOptions.projectid,
-			includeProperties: mockObjects.join(',')
+	describe('#getDataVersion', function () {
+		it('should call API with provided data and return response', async function () {
+			// given
+			const mockRes = {objects: []}
+			server.on({
+				method: 'POST',
+				path: '/getDataVersion',
+				reply: {
+					status: 200,
+					headers: {'content-type': 'application/json'},
+					body: JSON.stringify(mockRes)
+				}
+			})
+	
+			// when
+			const res = await getData.getDataVersion(mockOptions)
+	
+			// then
+			res.should.eql(mockRes)
+			const req = server.requests()[0]
+			basicAuth.parse(req.headers['authorization']).should.eql({
+				name: mockOptions.email,
+				pass: mockOptions.apikey
+			})
+			req.body.should.eql({})
 		})
 	})
 })
