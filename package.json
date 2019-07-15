@@ -15,18 +15,18 @@
   "author": "Aurélien Bertron",
   "license": "Apache-2.0",
   "dependencies": {
-    "superagent": "5.0.6"
+    "superagent": "5.1.0"
   },
   "devDependencies": {
     "basic-auth": "2.0.1",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
-    "eslint": "5.15.0",
-    "mocha": "^6.1.4",
+    "eslint": "6.0.1",
+    "mocha": "6.1.4",
     "mock-http-server": "1.2.0",
     "nyc": "14.1.1",
-    "proxyquire": "2.1.0",
-    "sinon": "7.2.7",
+    "proxyquire": "2.1.1",
+    "sinon": "7.3.2",
     "sinon-chai": "3.3.0"
   },
   "nyc": {
