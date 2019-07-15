@@ -10,7 +10,7 @@
   "scripts": {
     "coverage": "$(npm bin)/nyc npm test",
     "linter": "$(npm bin)/eslint ./**/*.js",
-    "test": "$(npm bin)/mocha --require test/setup-utils.js test/**/*-spec.js"
+    "test": "$(npm bin)/mocha --require test/setup-utils.js --recursive test"
   },
   "author": "Aurélien Bertron",
   "license": "Apache-2.0",
