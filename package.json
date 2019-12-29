@@ -15,19 +15,19 @@
   "author": "Aurélien Bertron",
   "license": "Apache-2.0",
   "dependencies": {
-    "superagent": "5.1.0"
+    "superagent": "5.1.3"
   },
   "devDependencies": {
     "basic-auth": "2.0.1",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
-    "eslint": "6.5.1",
-    "mocha": "6.2.1",
+    "eslint": "6.8.0",
+    "mocha": "6.2.2",
     "mock-http-server": "1.4.1",
-    "nyc": "14.1.1",
+    "nyc": "15.0.0",
     "proxyquire": "2.1.3",
-    "sinon": "7.5.0",
-    "sinon-chai": "3.3.0"
+    "sinon": "8.0.1",
+    "sinon-chai": "3.4.0"
   },
   "nyc": {
     "reporter": [
