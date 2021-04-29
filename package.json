@@ -1,6 +1,6 @@
 {
   "name": "@stormshield/libsw",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "A client library for Scrumwise API",
   "main": "src/index.js",
   "repository": {
