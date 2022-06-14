@@ -1,4 +1,4 @@
-# libsw
+# ⛔️ ARCHIVED libsw
 
 This is a simple client library for Scrumwise API.
 
